@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{6DEDE275-D232-4ADB-BBDC-CDB4A3C1F9B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserManagement", "UserManagement", "{1FEA412D-275D-4379-9FCA-F231CB2D3748}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{3202F1DD-B4AF-49B8-96F6-358386962FA4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{C861C1C1-1267-42D0-89C4-B604C19DA3A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{BCBC6C33-F288-4E5C-8997-B7E3B7B9B712}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{B942184B-8CBF-4AEE-95B4-519D7B3832F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MEDApp.UserManagement.Api", "MEDApp.UserManagement.Api\MEDApp.UserManagement.Api.csproj", "{9F688605-2BDF-4B6F-A1C4-40C17F055C0E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{F5F6C09A-B9F3-4893-ACE9-FB722C29CC01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F688605-2BDF-4B6F-A1C4-40C17F055C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F688605-2BDF-4B6F-A1C4-40C17F055C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F688605-2BDF-4B6F-A1C4-40C17F055C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F688605-2BDF-4B6F-A1C4-40C17F055C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1FEA412D-275D-4379-9FCA-F231CB2D3748} = {6DEDE275-D232-4ADB-BBDC-CDB4A3C1F9B6}
+		{3202F1DD-B4AF-49B8-96F6-358386962FA4} = {1FEA412D-275D-4379-9FCA-F231CB2D3748}
+		{C861C1C1-1267-42D0-89C4-B604C19DA3A9} = {1FEA412D-275D-4379-9FCA-F231CB2D3748}
+		{BCBC6C33-F288-4E5C-8997-B7E3B7B9B712} = {1FEA412D-275D-4379-9FCA-F231CB2D3748}
+		{B942184B-8CBF-4AEE-95B4-519D7B3832F7} = {1FEA412D-275D-4379-9FCA-F231CB2D3748}
+		{9F688605-2BDF-4B6F-A1C4-40C17F055C0E} = {3202F1DD-B4AF-49B8-96F6-358386962FA4}
+		{F5F6C09A-B9F3-4893-ACE9-FB722C29CC01} = {B942184B-8CBF-4AEE-95B4-519D7B3832F7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEC51297-8EE6-4555-8D0B-CBBFC6554FFD}
+	EndGlobalSection
+EndGlobal

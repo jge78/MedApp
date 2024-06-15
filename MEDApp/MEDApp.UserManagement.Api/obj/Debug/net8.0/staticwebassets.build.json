@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "gxSUdjiaNCpk/M9pNo3p7X65WHJ8ahfrHiCIM3aNM4c=",
+  "Source": "MEDApp.UserManagement.Api",
+  "BasePath": "_content/MEDApp.UserManagement.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
