@@ -1,0 +1,6 @@
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppDB\bin\Debug\UserManagementDB.dacpac
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppDB\bin\Debug\MedAppDB.dll
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppDB\bin\Debug\MedAppDB.pdb
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppDB\obj\Debug\UserManagementDB.sqlproj.AssemblyReference.cache
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppDB\obj\Debug\MedAppDB.dll
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppDB\obj\Debug\MedAppDB.pdb

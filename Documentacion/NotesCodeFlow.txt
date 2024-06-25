@@ -211,10 +211,10 @@ email			e-mail
 
 Acceptance Criteria
 
-The database contains my personal information, enough so I can schedule a medical appointment
+The database contains my personal information, enough so I can schedule a medical appointment	-->OK
 
 =============================
-Case 1
+Case 2
 =============================
 
 

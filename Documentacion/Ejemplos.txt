@@ -1,0 +1,16 @@
+
+User POST
+
+{
+  "id": 1,
+  "userType": 3,
+  "firstName": "FirstNameTest",
+  "lastName": "LastNameTest",
+  "dateOfBirth": "1978-05-18",
+  "phoneNumber": "99-55669988",
+  "email": "mail@string"
+}
+
+
+
+{"Id":0,"UserType":1,"FirstName":"string","LastName":"string","DateOfBirth":"2024-06-22T01:22:27.499Z","PhoneNumber":"string","Email":"string"}
