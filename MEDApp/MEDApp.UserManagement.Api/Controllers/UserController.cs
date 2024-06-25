@@ -47,13 +47,13 @@ namespace MEDApp.UserManagement.Api.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public async void Post([FromBody] User user)
+        public string Post([FromBody] User user)
         {
 
             //Obtener el User y serializarlo
             //Enviar el mensaje al queue (rabbitMQ /kafka)
-            _messagingService.SendMessage<User>(user);
-
+            //_messagingService.SendMessage<User>(user);
+            return _messagingService.SendMessage<User>(user);
 
         }
 

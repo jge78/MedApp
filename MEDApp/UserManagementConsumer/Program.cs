@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Threading.Channels;
 using MEDApp.UserManagement.Api.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -20,24 +21,31 @@ namespace UserManagementConsumer
 
             var factory = new ConnectionFactory
             {
-                HostName = config.GetSection("MessagingServers:UsersManagement").Value.ToString()
+                HostName = config.GetSection("MessagingServers:Server").Value.ToString(),
+                UserName = config.GetSection("MessagingServers:User").Value.ToString(),
+                Password = config.GetSection("MessagingServers:Password").Value.ToString()
             };
 
             var connection = factory.CreateConnection();
-
             using var channel = connection.CreateModel();
 
             channel.ExchangeDeclare(exchange: EXCHANGE_NAME, type: ExchangeType.Fanout);
-
             var queueName = channel.QueueDeclare().QueueName;
             channel.QueueBind(queue: queueName, exchange: EXCHANGE_NAME, routingKey: string.Empty);
-
+            
             var consumer = new EventingBasicConsumer(channel);
 
             consumer.Received += (model, EventArgs) =>
             {
                 var body = EventArgs.Body.ToArray();
                 var properties = EventArgs.BasicProperties;
+
+                if (properties.ReplyTo == null)
+                    return;
+
+                var replyproperties = channel.CreateBasicProperties();
+                replyproperties.CorrelationId = properties.CorrelationId;
+
                 var message = Encoding.UTF8.GetString(body);
                 Console.WriteLine(message);
 
@@ -47,9 +55,10 @@ namespace UserManagementConsumer
                 var responseMessage = JsonConvert.SerializeObject(newUser);
                 var responseMessageeBytes = Encoding.UTF8.GetBytes(responseMessage);
 
+                channel.BasicPublish(EXCHANGE_NAME, properties.ReplyTo, replyproperties, responseMessageeBytes);
             };
 
-            channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
+            channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
             Console.ReadKey();
 
         }
