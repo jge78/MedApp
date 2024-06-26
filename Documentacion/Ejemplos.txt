@@ -14,3 +14,80 @@ User POST
 
 
 {"Id":0,"UserType":1,"FirstName":"string","LastName":"string","DateOfBirth":"2024-06-22T01:22:27.499Z","PhoneNumber":"string","Email":"string"}
+
+---Users
+{
+  "id": 1,
+  "userType": 2,
+  "firstName": "Admin",
+  "lastName": "Admin",
+  "dateOfBirth": "2024-01-01T00:00:00",
+  "phoneNumber": "999-55669988",
+  "email": "admin@medap.com"
+}
+
+
+---Medics
+{
+  "id": 0,
+  "userType": 1,
+  "firstName": "Gregory",
+  "lastName": "House Jr",
+  "dateOfBirth": "1970-02-15",
+  "phoneNumber": "999-55669988",
+  "email": "house@medap.com"
+}
+
+{
+  "id": 0,
+  "userType": 1,
+  "firstName": "Meredith",
+  "lastName": "Grace",
+  "dateOfBirth": "1975-11-02",
+  "phoneNumber": "999-55888999",
+  "email": "graces@medap.com"
+}
+
+{
+  "id": 0,
+  "userType": 1,
+  "firstName": "Sigmund",
+  "lastName": "Freud",
+  "dateOfBirth": "1895-10-08",
+  "phoneNumber": "999-69696969",
+  "email": "momys_boy@medap.com"
+}
+
+--Patients
+
+
+--Appointments
+{
+  "id": 0,
+  "patient":6,
+  "medic": 2,
+  "date": "2024-06-26",
+  "time": "2024-06-26T09:00:00"
+}
+
+{
+  "id": 0,
+  "patient": 3,
+  "medic": 7,
+  "date": "2024-06-27",
+  "time": "2024-06-27T10:30:00"
+}
+
+--Appointments UPDATE
+
+{
+  "id": 2,
+  "patient": 3,
+  "medic": 7,
+  "date": "2024-06-27",
+  "time": "2024-06-27T09:30:00"
+}
+
+
+http://localhost:5214/api/User
+http://localhost:5087/api/Appointment/

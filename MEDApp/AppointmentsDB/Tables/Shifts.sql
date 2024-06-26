@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[Shifts]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	Medic INT NOT NULL,
+	DayOfWeek INT NOT NULL,
+	StartTime TIME NOT NULL,
+	EndTime TIME NOT NULL
+)
