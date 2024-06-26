@@ -8,7 +8,8 @@ namespace MEDApp.UserManagement.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddSingleton<IMessagingService, RabbitMQMessagingService>();
+            //builder.Services.AddSingleton<IMessagingService, RabbitMQMessagingService>();
+            builder.Services.AddTransient<IMessagingService, RabbitMQMessagingService>();
 
             // Add services to the container.
             builder.Services.AddControllers();
@@ -18,7 +19,6 @@ namespace MEDApp.UserManagement.Api
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-
             app.UseAuthorization();
             app.MapControllers();
 

@@ -18,55 +18,41 @@ namespace MEDApp.UserManagement.Api.Controllers
             _messagingService = messagingService;
         }
 
-        // GET: api/<UserController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // ADD POST api/<UserController> 
+        [HttpPost]
+        public string Post([FromBody] User user)
         {
-            return new string[] { "value1", "value2" };
+            return _messagingService.AddUser<User>(user);
+        }
 
+        // DELETE api/<UserController>/5
+        [HttpDelete("{id}")]
+        public string Delete(int id)
+        {
+            return _messagingService.DeleteUser(id);
         }
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
         public User Get(int id)
         {
-
-            User user = new User
-            {
-                Id = 1,
-                FirstName = "TestGet",
-                LastName = "LAtNameTestGet",
-                DateOfBirth = new DateTime(1978, 5, 18),
-                PhoneNumber = "999-55889966",
-                Email = "mail@gmail.com"
-            };
-
-            return user;
-            //return "value";
+            return _messagingService.GetUser(id);
         }
 
-        // POST api/<UserController>
-        [HttpPost]
-        public string Post([FromBody] User user)
+        // GET: api/<UserController>
+        [HttpGet]
+        public List<User> Get()
         {
-
-            //Obtener el User y serializarlo
-            //Enviar el mensaje al queue (rabbitMQ /kafka)
-            //_messagingService.SendMessage<User>(user);
-            return _messagingService.SendMessage<User>(user);
-
+            return _messagingService.GetAllUsers();
         }
 
-        //// PUT api/<UserController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
+        // PUT api/<UserController>/5
+        [HttpPut("{id}")]
+        public User Put(int id, [FromBody] User user)
+        {
+            user.Id= id;    
+            return _messagingService.UpdateUser(user);
+        }
 
-        //// DELETE api/<UserController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

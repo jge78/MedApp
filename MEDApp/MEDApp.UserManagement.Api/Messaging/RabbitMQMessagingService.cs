@@ -2,14 +2,11 @@
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Collections.Concurrent;
-using System.Net.Sockets;
 using System.Text;
-using System.Threading.Channels;
 
 namespace MEDApp.UserManagement.Api.Messaging
 {
-    
+
     public class RabbitMQMessagingService : IMessagingService
     {
         private const string EXCHANGE_NAME = "MedApp";
@@ -17,10 +14,81 @@ namespace MEDApp.UserManagement.Api.Messaging
         private string _replyQueueName = "rpc_reply";
         private EventingBasicConsumer _consumer;
 
-        public string SendMessage<T>(T message)
+        public string AddUser<T>(T message)
         {
-            //Boolean valorRecuperado = false;
-            string idNuevoUsuario = "";
+            Message addUserMessage = new Message
+            {
+                operationType = MessageEnums.OperationTypes.Add,
+                id="0",
+                payload = message
+            };
+
+            var user = new User();
+            user = JsonConvert.DeserializeObject<User>(Send(addUserMessage));
+            return user.Id.ToString();
+        }
+
+        public string DeleteUser(int id)
+        {
+            //throw new NotImplementedException();
+            Message deleteUserMessage = new Message
+            {
+                operationType = MessageEnums.OperationTypes.Delete,
+                id = id.ToString()
+            };
+
+            var user = new User();
+            user = JsonConvert.DeserializeObject<User>(Send(deleteUserMessage));
+            return user.Id.ToString();
+
+        }
+        
+        public User GetUser(int id)
+        {
+            //throw new NotImplementedException();
+            Message getUserMessage = new Message
+            {
+                operationType = MessageEnums.OperationTypes.Get,
+                id = id.ToString()
+            };
+
+            var user = new User();
+            user = JsonConvert.DeserializeObject<User>(Send(getUserMessage));
+            return user;
+
+        }
+
+        public List<User> GetAllUsers()
+        {
+
+            //throw new NotImplementedException();
+            Message getAllUsersMessage = new Message
+            {
+                operationType = MessageEnums.OperationTypes.GetAll
+            };
+
+            var users = new List<User>();
+            users = JsonConvert.DeserializeObject<List<User>>(Send(getAllUsersMessage));
+            return users;
+
+        }
+        public User UpdateUser<T>(T message)
+        {
+            Message updateUserMessage = new Message
+            {
+                operationType = MessageEnums.OperationTypes.Update,
+                payload = message
+            };
+
+            var updateUser = new User();
+            updateUser = JsonConvert.DeserializeObject<User>(Send(updateUserMessage));
+            return updateUser;
+
+        }
+
+        public string Send<T>(T message)
+        {
+            string returnMessage = "";
 
             var factory = new ConnectionFactory
             {
@@ -47,24 +115,19 @@ namespace MEDApp.UserManagement.Api.Messaging
             {
                 if (eventArgs.BasicProperties.ReplyTo != null)
                     return;
-                
-                var body = eventArgs.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                User user = JsonConvert.DeserializeObject<User>(message);
 
-                //valorRecuperado=true;
-                idNuevoUsuario = user.Id.ToString();
+                var body = eventArgs.Body.ToArray();
+                returnMessage = Encoding.UTF8.GetString(body);
             };
 
             channel.BasicPublish(exchange: EXCHANGE_NAME, routingKey: QUEUE_NAME, basicProperties: props, body: body);
 
-            while (idNuevoUsuario=="")
+            while (returnMessage == "")
             {
                 channel.BasicConsume(queue: _replyQueueName, autoAck: true, consumer: _consumer);
             }
 
-            return idNuevoUsuario;
-
+            return returnMessage;
 
         }
 
