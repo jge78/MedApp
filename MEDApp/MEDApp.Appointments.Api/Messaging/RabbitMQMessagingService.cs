@@ -1,88 +1,89 @@
-﻿using MEDApp.UserManagement.Api.Models;
+﻿using MEDApp.Appointments.Api.Messaging;
+using MEDApp.Appointments.Api.Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 
-namespace MEDApp.UserManagement.Api.Messaging
+namespace MEDApp.Appointments.Api.Messaging
 {
 
     public class RabbitMQMessagingService : IMessagingService
     {
-        private const string EXCHANGE_NAME = "MedAppUsers";
-        private const string QUEUE_NAME = "Users";
+        private const string EXCHANGE_NAME = "MedAppAppointments";
+        private const string QUEUE_NAME = "MedAppAppointments";
         private string _replyQueueName = "rpc_reply";
         private EventingBasicConsumer _consumer;
 
-        public string AddUser<T>(T message)
+        public string AddAppointment<T>(T message)
         {
-            Message addUserMessage = new Message
+            Message addappointmentMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.Add,
                 id="0",
                 payload = message
             };
 
-            var user = new User();
-            user = JsonConvert.DeserializeObject<User>(Send(addUserMessage));
-            return user.Id.ToString();
+            var appointment = new Appointment();
+            appointment = JsonConvert.DeserializeObject<Appointment>(Send(addappointmentMessage));
+            return appointment.Id.ToString();
         }
 
-        public string DeleteUser(int id)
+        public string DeleteAppointment(int id)
         {
             //throw new NotImplementedException();
-            Message deleteUserMessage = new Message
+            Message deleteappointmentMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.Delete,
                 id = id.ToString()
             };
 
-            var user = new User();
-            user = JsonConvert.DeserializeObject<User>(Send(deleteUserMessage));
-            return user.Id.ToString();
+            var appointment = new Appointment();
+            appointment = JsonConvert.DeserializeObject<Appointment>(Send(deleteappointmentMessage));
+            return appointment.Id.ToString();
 
         }
         
-        public User GetUser(int id)
+        public Appointment GetAppointment(int id)
         {
             //throw new NotImplementedException();
-            Message getUserMessage = new Message
+            Message getappointmentMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.Get,
                 id = id.ToString()
             };
 
-            var user = new User();
-            user = JsonConvert.DeserializeObject<User>(Send(getUserMessage));
-            return user;
+            var appointment = new Appointment();
+            appointment = JsonConvert.DeserializeObject<Appointment>(Send(getappointmentMessage));
+            return appointment;
 
         }
 
-        public List<User> GetAllUsers()
+        public List<Appointment> GetAllAppointment()
         {
 
             //throw new NotImplementedException();
-            Message getAllUsersMessage = new Message
+            Message getAllappointmentsMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.GetAll
             };
 
-            var users = new List<User>();
-            users = JsonConvert.DeserializeObject<List<User>>(Send(getAllUsersMessage));
-            return users;
+            var appointments = new List<Appointment>();
+            appointments = JsonConvert.DeserializeObject<List<Appointment>>(Send(getAllappointmentsMessage));
+            return appointments;
 
         }
-        public User UpdateUser<T>(T message)
+        public Appointment UpdateAppointment<T>(T message)
         {
-            Message updateUserMessage = new Message
+            Message updateappointmentMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.Update,
                 payload = message
             };
 
-            var updateUser = new User();
-            updateUser = JsonConvert.DeserializeObject<User>(Send(updateUserMessage));
-            return updateUser;
+            var updateappointment = new Appointment();
+            updateappointment = JsonConvert.DeserializeObject<Appointment>(Send(updateappointmentMessage));
+            return updateappointment;
 
         }
 

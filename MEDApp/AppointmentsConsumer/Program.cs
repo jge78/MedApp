@@ -1,19 +1,20 @@
 ﻿using System.Text;
 using System.Threading.Channels;
-using MEDApp.UserManagement.Api.Models;
+using AppointmentsConsumer.Data;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using UserManagementConsumer.Data;
-using UserManagementConsumer.Messaging;
+using AppointmentsConsumer.Data.Models;
+using AppointmentsConsumer.Messaging;
 
-namespace UserManagementConsumer
+
+namespace AppointmentManagementConsumer
 {
     internal class Program
     {
-        private const string EXCHANGE_NAME = "MedAppUsers";
-        private const string QUEUE_NAME = "Users";
+        private const string EXCHANGE_NAME = "MedAppAppointments";
+        private const string QUEUE_NAME = "Appointments";
         private static IConfigurationRoot config;
 
         static void Main(string[] args)
@@ -51,7 +52,7 @@ namespace UserManagementConsumer
                 Console.WriteLine(message);
 
                 Message messageToprocess = JsonConvert.DeserializeObject<Message>(message);
-                var idUser = messageToprocess.id;
+                var idAppointment = messageToprocess.id;
 
                 string responseMessage = "";
                 Byte[] responseMessageBytes;
@@ -59,34 +60,34 @@ namespace UserManagementConsumer
                 switch (messageToprocess.operationType)
                 {
                     case MessageEnums.OperationTypes.Add:
-                        var tempUser = JsonConvert.SerializeObject(messageToprocess.payload);
-                        User user = JsonConvert.DeserializeObject<User>(tempUser);
+                        var tempAppointment = JsonConvert.SerializeObject(messageToprocess.payload);
+                        Appointment Appointment = JsonConvert.DeserializeObject<Appointment>(tempAppointment);
 
-                        User newUser = AddUser(user);
-                        responseMessage = JsonConvert.SerializeObject(newUser);
+                        Appointment newAppointment = AddAppointment(Appointment);
+                        responseMessage = JsonConvert.SerializeObject(newAppointment);
                         break;
 
                     case MessageEnums.OperationTypes.Delete:
-                        DeleteUser(Int32.Parse(idUser));
-                        User deletedUser = new User { Id = Int32.Parse(idUser) };
-                        responseMessage = JsonConvert.SerializeObject(deletedUser);
+                        DeleteAppointment(Int32.Parse(idAppointment));
+                        Appointment deletedAppointment = new Appointment { Id = Int32.Parse(idAppointment) };
+                        responseMessage = JsonConvert.SerializeObject(deletedAppointment);
                         break;
 
                     case MessageEnums.OperationTypes.Get:
-                        User getUser = GetUser(Int32.Parse(idUser));
-                        responseMessage = JsonConvert.SerializeObject(getUser);
+                        Appointment getAppointment = GetAppointment(Int32.Parse(idAppointment));
+                        responseMessage = JsonConvert.SerializeObject(getAppointment);
                         break;
 
                     case MessageEnums.OperationTypes.GetAll:
-                        List<User> users = GetAllUsers();
-                        responseMessage = JsonConvert.SerializeObject(users);
+                        List<Appointment> Appointments = GetAllAppointments();
+                        responseMessage = JsonConvert.SerializeObject(Appointments);
                         break;
 
                     case MessageEnums.OperationTypes.Update:
-                        var tempUpdateUser = JsonConvert.SerializeObject(messageToprocess.payload);
-                        User updateUser = JsonConvert.DeserializeObject<User>(tempUpdateUser);
+                        var tempUpdateAppointment = JsonConvert.SerializeObject(messageToprocess.payload);
+                        Appointment updateAppointment = JsonConvert.DeserializeObject<Appointment>(tempUpdateAppointment);
 
-                        User updated = UpdateUser(updateUser);
+                        Appointment updated = UpdateAppointment(updateAppointment);
                         responseMessage = JsonConvert.SerializeObject(updated);
                         break;
 
@@ -114,40 +115,39 @@ namespace UserManagementConsumer
 
         }
 
-        private static User AddUser(User user)
+        private static Appointment AddAppointment(Appointment Appointment)
         {
-            IUserRepository userRepository = CreateUserRepository();
-            return userRepository.Add(user);
+            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
+            return appointmentRepository.Add(Appointment);
         }
 
-        private static void DeleteUser(int id)
+        private static void DeleteAppointment(int id)
         {
-            IUserRepository userRepository = CreateUserRepository();
-            userRepository.Delete(id);
+            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
+            appointmentRepository.Delete(id);
         }
 
-        private static User GetUser(int id)
+        private static Appointment GetAppointment(int id)
         {
-            IUserRepository userRepository = CreateUserRepository();
-            //return userRepository.Add(user);
-            return userRepository.GetUser(id);
+            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
+            return appointmentRepository.Get(id);
         }
 
-        private static List<User> GetAllUsers()
+        private static List<Appointment> GetAllAppointments()
         {
-            IUserRepository userRepository = CreateUserRepository();
-            return userRepository.GetAll();
+            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
+            return appointmentRepository.GetAll();
         }
 
-        private static User UpdateUser(User user)
+        private static Appointment UpdateAppointment(Appointment Appointment)
         {
-            IUserRepository userRepository = CreateUserRepository();
-            return userRepository.Update(user);
+            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
+            return appointmentRepository.Update(Appointment);
         }
 
-        private static IUserRepository CreateUserRepository()
+        private static IAppointmentRepository CreateappointmentRepository()
         {
-            return new UserRepository(config.GetConnectionString("MedAppUserDB"));
+            return new AppointmentRepository(config.GetConnectionString("MedAppAppointmentDB"));
         }
 
     }
