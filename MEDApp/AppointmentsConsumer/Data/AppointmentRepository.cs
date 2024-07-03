@@ -31,12 +31,12 @@ namespace AppointmentsConsumer.Data
 
         public void Delete(int id)
         {
-            this.db.Execute("DELETE FROM dbo.Appointments WHERE Id = @Id", new { id });
+            db.Execute("DELETE FROM dbo.Appointments WHERE Id = @Id", new { id });
         }
 
         public Appointment Get(int id)
         {
-            return this.db.Query<Appointment>("SELECT Id,Patient,Medic,[Date],CONVERT(SMALLDATETIME,[Time]) AS Time FROM dbo.Appointments WHERE Id = @Id", new { id }).SingleOrDefault();
+            return db.Query<Appointment>("SELECT Id,Patient,Medic,[Date],CONVERT(SMALLDATETIME,[Time]) AS Time FROM dbo.Appointments WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
         public List<Appointment> GetAll()
@@ -55,7 +55,7 @@ namespace AppointmentsConsumer.Data
             " Time = @Time" +
             " WHERE Id = @Id";
 
-            this.db.Execute(sql, appointment);
+            db.Execute(sql, appointment);
             return appointment;
         }
     }

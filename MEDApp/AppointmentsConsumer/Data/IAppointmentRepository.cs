@@ -2,7 +2,7 @@
 
 namespace AppointmentsConsumer.Data
 {
-    internal interface IAppointmentRepository
+    public interface IAppointmentRepository
     {
         Appointment Get(int id);
         List<Appointment> GetAll();

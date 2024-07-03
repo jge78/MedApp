@@ -83,9 +83,19 @@ User POST
 {
   "id": 2,
   "patient": 3,
-  "medic": 7,
+  "medic": 6,
   "date": "2024-06-27",
   "time": "2024-06-27T09:30:00"
+}
+
+
+--Appointments ADD
+{
+  "id": 0,
+  "patient": 3,
+  "medic": 7,
+  "date": "2024-06-28",
+  "time": "2024-06-28T09:00:00"
 }
 
 

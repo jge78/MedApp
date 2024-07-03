@@ -1,6 +1,4 @@
-﻿using MEDApp.Appointments.Api.Messaging;
-using MEDApp.Appointments.Api.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -8,87 +6,83 @@ using System.Text;
 namespace MEDApp.Appointments.Api.Messaging
 {
 
-    public class RabbitMQMessagingService : IMessagingService
+    public class AppointmentMessagingServiceRabbitMQ : IMessagingService
     {
         private const string EXCHANGE_NAME = "MedAppAppointments";
         private const string QUEUE_NAME = "MedAppAppointments";
         private string _replyQueueName = "rpc_reply";
-        private EventingBasicConsumer _consumer;
 
-        public string AddAppointment<T>(T message)
+        public T Add<T>(T message)
         {
-            Message addappointmentMessage = new Message
+            Message addMessage = new Message
             {
-                operationType = MessageEnums.OperationTypes.Add,
+                messageEntity = typeof(T).ToString(),
+                MessageOperation = MessageEnums.MessageOperations.Add,
                 id="0",
                 payload = message
             };
 
-            var appointment = new Appointment();
-            appointment = JsonConvert.DeserializeObject<Appointment>(Send(addappointmentMessage));
-            return appointment.Id.ToString();
-        }
-
-        public string DeleteAppointment(int id)
-        {
-            //throw new NotImplementedException();
-            Message deleteappointmentMessage = new Message
-            {
-                operationType = MessageEnums.OperationTypes.Delete,
-                id = id.ToString()
-            };
-
-            var appointment = new Appointment();
-            appointment = JsonConvert.DeserializeObject<Appointment>(Send(deleteappointmentMessage));
-            return appointment.Id.ToString();
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(addMessage));
+            return returnValue;
 
         }
         
-        public Appointment GetAppointment(int id)
+        public T Delete<T>(int id)
         {
-            //throw new NotImplementedException();
-            Message getappointmentMessage = new Message
+            Message deleteMessage = new Message
             {
-                operationType = MessageEnums.OperationTypes.Get,
+                messageEntity = typeof(T).ToString(),
+                MessageOperation = MessageEnums.MessageOperations.Delete,
                 id = id.ToString()
             };
 
-            var appointment = new Appointment();
-            appointment = JsonConvert.DeserializeObject<Appointment>(Send(getappointmentMessage));
-            return appointment;
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(deleteMessage));
+            return returnValue;
 
         }
 
-        public List<Appointment> GetAllAppointment()
+        public T Get<T>(int id)
         {
 
-            //throw new NotImplementedException();
-            Message getAllappointmentsMessage = new Message
+            Message getMessage = new Message
             {
-                operationType = MessageEnums.OperationTypes.GetAll
+                messageEntity = typeof(T).ToString(),
+                MessageOperation = MessageEnums.MessageOperations.Get,
+                id = id.ToString()
             };
 
-            var appointments = new List<Appointment>();
-            appointments = JsonConvert.DeserializeObject<List<Appointment>>(Send(getAllappointmentsMessage));
-            return appointments;
-
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(getMessage));
+            return returnValue;
         }
-        public Appointment UpdateAppointment<T>(T message)
+
+        public List<T> GetAll<T>()
         {
-            Message updateappointmentMessage = new Message
+            Message getAllMessage = new Message
             {
-                operationType = MessageEnums.OperationTypes.Update,
+                messageEntity = typeof(T).ToString(),
+                MessageOperation = MessageEnums.MessageOperations.GetAll
+            };
+
+            var returnList = JsonConvert.DeserializeObject<List<T>>(Send(getAllMessage));
+            return returnList;
+        }
+
+        public T Update<T>(T message)
+        {
+            Message updateMessage = new Message
+            {
+                messageEntity = typeof(T).ToString(),
+                MessageOperation = MessageEnums.MessageOperations.Update,
                 payload = message
             };
 
-            var updateappointment = new Appointment();
-            updateappointment = JsonConvert.DeserializeObject<Appointment>(Send(updateappointmentMessage));
-            return updateappointment;
-
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(updateMessage));
+            return returnValue;
         }
 
         public string Send<T>(T message)
         {
+            EventingBasicConsumer _consumer;
             string returnMessage = "";
 
             var factory = new ConnectionFactory
