@@ -1,12 +1,10 @@
 ﻿using System.Text;
-using System.Threading.Channels;
-using AppointmentsConsumer.Data;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using AppointmentsConsumer.Data.Models;
 using AppointmentsConsumer.Messaging;
+using AppointmentsConsumer;
 
 
 namespace AppointmentManagementConsumer
@@ -52,49 +50,12 @@ namespace AppointmentManagementConsumer
                 Console.WriteLine(message);
 
                 Message messageToprocess = JsonConvert.DeserializeObject<Message>(message);
-                var idAppointment = messageToprocess.id;
 
-                string responseMessage = "";
+                var consumer = ConsumerProcessorFactory.Create(messageToprocess.messageEntity, config.GetConnectionString("MedAppAppointmentDB"));
+
+                string responseMessage = consumer.ProcessMessage(messageToprocess);
+
                 Byte[] responseMessageBytes;
-
-                switch (messageToprocess.operationType)
-                {
-                    case MessageEnums.OperationTypes.Add:
-                        var tempAppointment = JsonConvert.SerializeObject(messageToprocess.payload);
-                        Appointment Appointment = JsonConvert.DeserializeObject<Appointment>(tempAppointment);
-
-                        Appointment newAppointment = AddAppointment(Appointment);
-                        responseMessage = JsonConvert.SerializeObject(newAppointment);
-                        break;
-
-                    case MessageEnums.OperationTypes.Delete:
-                        DeleteAppointment(Int32.Parse(idAppointment));
-                        Appointment deletedAppointment = new Appointment { Id = Int32.Parse(idAppointment) };
-                        responseMessage = JsonConvert.SerializeObject(deletedAppointment);
-                        break;
-
-                    case MessageEnums.OperationTypes.Get:
-                        Appointment getAppointment = GetAppointment(Int32.Parse(idAppointment));
-                        responseMessage = JsonConvert.SerializeObject(getAppointment);
-                        break;
-
-                    case MessageEnums.OperationTypes.GetAll:
-                        List<Appointment> Appointments = GetAllAppointments();
-                        responseMessage = JsonConvert.SerializeObject(Appointments);
-                        break;
-
-                    case MessageEnums.OperationTypes.Update:
-                        var tempUpdateAppointment = JsonConvert.SerializeObject(messageToprocess.payload);
-                        Appointment updateAppointment = JsonConvert.DeserializeObject<Appointment>(tempUpdateAppointment);
-
-                        Appointment updated = UpdateAppointment(updateAppointment);
-                        responseMessage = JsonConvert.SerializeObject(updated);
-                        break;
-
-                    default:
-                        break;
-                }
-
                 responseMessageBytes = Encoding.UTF8.GetBytes(responseMessage);
 
                 channel.BasicPublish(EXCHANGE_NAME, properties.ReplyTo, replyproperties, responseMessageBytes);
@@ -113,41 +74,6 @@ namespace AppointmentManagementConsumer
 
             config = builder.Build();
 
-        }
-
-        private static Appointment AddAppointment(Appointment Appointment)
-        {
-            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
-            return appointmentRepository.Add(Appointment);
-        }
-
-        private static void DeleteAppointment(int id)
-        {
-            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
-            appointmentRepository.Delete(id);
-        }
-
-        private static Appointment GetAppointment(int id)
-        {
-            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
-            return appointmentRepository.Get(id);
-        }
-
-        private static List<Appointment> GetAllAppointments()
-        {
-            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
-            return appointmentRepository.GetAll();
-        }
-
-        private static Appointment UpdateAppointment(Appointment Appointment)
-        {
-            IAppointmentRepository appointmentRepository = CreateappointmentRepository();
-            return appointmentRepository.Update(Appointment);
-        }
-
-        private static IAppointmentRepository CreateappointmentRepository()
-        {
-            return new AppointmentRepository(config.GetConnectionString("MedAppAppointmentDB"));
         }
 
     }

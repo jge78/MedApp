@@ -1,4 +1,5 @@
 using MEDApp.Appointments.Api.Messaging;
+using System.Numerics;
 
 namespace MEDApp.Appointments.Api
 {
@@ -9,8 +10,8 @@ namespace MEDApp.Appointments.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddTransient<IMessagingService, RabbitMQMessagingService>();
-            
+            builder.Services.AddTransient<IMessagingService, AppointmentMessagingServiceRabbitMQ>();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -18,9 +19,7 @@ namespace MEDApp.Appointments.Api
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-
             app.UseAuthorization();
-
             app.MapControllers();
 
             if (app.Environment.IsDevelopment())

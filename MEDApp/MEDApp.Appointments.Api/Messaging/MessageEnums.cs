@@ -2,7 +2,7 @@
 {
     public class MessageEnums
     {
-        public enum OperationTypes
+        public enum MessageOperations
         {
             Add = 1,
             Delete,

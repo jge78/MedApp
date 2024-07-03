@@ -19,40 +19,37 @@ namespace MEDApp.Appointments.Api.Controllers
 
         // POST ADD api/<AppointmentController>
         [HttpPost]
-        public string Post([FromBody] Appointment appointment)
+        public Appointment Post([FromBody] Appointment appointment)
         {
-            return _messagingService.AddAppointment<Appointment>(appointment);
+            return _messagingService.Add<Appointment>(appointment);
         }
 
         // DELETE api/<AppointmentController>/5
         [HttpDelete("{id}")]
-        public string Delete(int id)
+        public Appointment Delete(int id)
         {
-            return _messagingService.DeleteAppointment(id);
+            return _messagingService.Delete<Appointment>(id);
         }
 
         // GET: api/<AppointmentController>
         [HttpGet]
         public List<Appointment> Get()
         {
-            //return new string[] { "value1", "value2" };
-            return _messagingService.GetAllAppointment();
-
+            return _messagingService.GetAll<Appointment>();
         }
 
         // GET api/<AppointmentController>/5
         [HttpGet("{id}")]
         public Appointment Get(int id)
         {
-            return _messagingService.GetAppointment(id);
+            return _messagingService.Get<Appointment>(id);
         }
 
-
         // PUT api/<AppointmentController>/5
-        [HttpPut("{id}")]
-        public Appointment Put(int id, [FromBody] Appointment appointment)
+        [HttpPut]
+        public Appointment Put([FromBody] Appointment appointment)
         {
-            return _messagingService.UpdateAppointment<Appointment>(appointment);
+            return _messagingService.Update<Appointment>(appointment);
         }
 
     }
