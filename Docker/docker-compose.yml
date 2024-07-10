@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+   rabbitmq:
+       image: rabbitmq:3.10.6-management-alpine
+       ports:
+         - 5672:5672    #amqp
+         - 15672:15672  #http
+       healthcheck:
+         test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+         interval: 5s
+         timeout: 10s
+         retries: 3
+   appointmentsconsumer:
+       image: appointmentsconsumer:dev
+       depends_on:
+         - rabbitmq
+       build:
+         context: .
+         dockerfile: appointmentsconsumer/Dockerfile
+   medapp.appointments.api:
+       image: medappappointmentsapi:dev
+       ports:
+         - 32770:8080
+       depends_on:
+         - rabbitmq
+         - appointmentsconsumer
+       build:
+         context: .
+         dockerfile: MEDApp.Appointments.Api/Dockerfile
+

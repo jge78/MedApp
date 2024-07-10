@@ -11,6 +11,12 @@ namespace MEDApp.Appointments.Api.Messaging
         private const string EXCHANGE_NAME = "MedAppAppointments";
         private const string QUEUE_NAME = "MedAppAppointments";
         private string _replyQueueName = "rpc_reply";
+        private static IConfigurationRoot config;
+
+        public AppointmentMessagingServiceRabbitMQ()
+        {
+            Initialize();
+        }
 
         public T Add<T>(T message)
         {
@@ -87,15 +93,19 @@ namespace MEDApp.Appointments.Api.Messaging
 
             var factory = new ConnectionFactory
             {
-                HostName = "localhost"
+                HostName = config.GetSection("MessagingServers:Server").Value.ToString(),
+                UserName = config.GetSection("MessagingServers:User").Value.ToString(),
+                Password = config.GetSection("MessagingServers:Password").Value.ToString()
             };
 
             var connection = factory.CreateConnection();
 
             using var channel = connection.CreateModel();
             channel.ExchangeDeclare(exchange: EXCHANGE_NAME, type: ExchangeType.Fanout);
-
+            channel.QueueDeclare(QUEUE_NAME,true,false,false);
+            channel.QueueDeclare(_replyQueueName, true, false, false);
             channel.QueueBind(queue: _replyQueueName, exchange: EXCHANGE_NAME, routingKey: _replyQueueName);
+
             _consumer = new EventingBasicConsumer(channel);
 
             var corrId = Guid.NewGuid().ToString();
@@ -123,6 +133,16 @@ namespace MEDApp.Appointments.Api.Messaging
             }
 
             return returnMessage;
+
+        }
+
+        private static void Initialize()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
+
+            config = builder.Build();
 
         }
 

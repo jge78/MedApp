@@ -34,6 +34,7 @@ namespace AppointmentManagementConsumer
             channel.QueueBind(queue: queueName, exchange: EXCHANGE_NAME, routingKey: string.Empty);
 
             var consumer = new EventingBasicConsumer(channel);
+            string responseMessage="";
 
             consumer.Received += (model, EventArgs) =>
             {
@@ -53,7 +54,7 @@ namespace AppointmentManagementConsumer
 
                 var consumer = ConsumerProcessorFactory.Create(messageToprocess.messageEntity, config.GetConnectionString("MedAppAppointmentDB"));
 
-                string responseMessage = consumer.ProcessMessage(messageToprocess);
+                responseMessage = consumer.ProcessMessage(messageToprocess);
 
                 Byte[] responseMessageBytes;
                 responseMessageBytes = Encoding.UTF8.GetBytes(responseMessage);
@@ -61,11 +62,13 @@ namespace AppointmentManagementConsumer
                 channel.BasicPublish(EXCHANGE_NAME, properties.ReplyTo, replyproperties, responseMessageBytes);
             };
 
-            channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
-            Console.ReadKey();
+            while (true)
+            {
+                channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
+            }
+
 
         }
-
         private static void Initialize()
         {
             var builder = new ConfigurationBuilder()
