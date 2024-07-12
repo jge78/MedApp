@@ -1,0 +1,55 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/appointment",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5087
+        }
+      ],
+      "DownstreamPathTemplate": "/api/appointment"
+    },
+    {
+      "UpstreamPathTemplate": "/api/appointment/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5087
+        }
+      ],
+      "DownstreamPathTemplate": "/api/appointment/{id}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/shift",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5087
+        }
+      ],
+      "DownstreamPathTemplate": "/api/shift"
+    },
+    {
+      "UpstreamPathTemplate": "/api/shift/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5087
+        }
+      ],
+      "DownstreamPathTemplate": "/api/shift/{id}"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseURL": "http://localhost:5003"
+  }
+}

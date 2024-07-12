@@ -1,0 +1,64 @@
+version: '3.4'
+
+networks:
+  backend:
+  frontend:
+
+services:
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.10.6-management-alpine
+    ports:
+      - 5672:5672    #amqp
+      - 15672:15672  #http
+    networks:
+      - backend
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  appointmentsdb:
+    container_name: appointments-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Dayforce1!
+    networks:
+      - backend
+    ports:
+      - 1433:1433
+
+  medapp.appointments.api:
+    container_name: medapp-appointments-api
+    image: ${DOCKER_REGISTRY-}medappappointmentsapi
+    depends_on:
+      - rabbitmq
+    ports:
+      - 8080:8080    #http
+    build:
+      context: .
+      dockerfile: MEDApp.Appointments.Api/Dockerfile
+    networks:
+      - backend
+
+  medapp.appointmentsconsumer:
+    container_name: medapp-appointments-consumer
+    image: ${DOCKER_REGISTRY-}medappappointmentsconsumer
+    depends_on:
+      - rabbitmq
+    build:
+      context: .
+      dockerfile: AppointmentsConsumer/Dockerfile
+    networks:
+      - backend
+
+  # orderdb:
+  #   container_name: order-db
+  #   image: mongo
+  #   ports:
+  #     - 8005:27017
+  #   networks:
+  #     - backend

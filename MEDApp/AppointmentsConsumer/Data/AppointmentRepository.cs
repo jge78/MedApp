@@ -58,5 +58,65 @@ namespace AppointmentsConsumer.Data
             db.Execute(sql, appointment);
             return appointment;
         }
+
+        public bool InitializeDB()
+        {
+            if (DatabaseExists())
+                return true;
+
+            return CreateDB();
+        }
+
+        private bool DatabaseExists()
+        {
+            var sql = "SELECT COUNT(1) FROM sys.databases WHERE name = 'MedAppAppointmentsDB'";
+            return db.Query<int>(sql).SingleOrDefault()!=0;
+        }
+
+        private bool CreateDB()
+        {
+            var sql =
+             "IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'MedAppAppointmentsDB')" +
+             " BEGIN CREATE DATABASE MedAppAppointmentsDB END";
+
+            try
+            {
+                db.Execute(sql);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return CreateTables();
+
+        }
+
+        private bool CreateTables()
+        {
+            var sql =
+                "USE MedAppAppointmentsDB; " +
+                "CREATE TABLE dbo.Appointments " +
+                "([Id] INT NOT NULL PRIMARY KEY IDENTITY," +
+                "Patient INT NOT NULL," +
+                "Medic INT NOT NULL," +
+                "[Date] DATE NOT NULL," +
+                "[Time] TIME ); " +
+                "CREATE TABLE dbo.Shifts " +
+                "([Id] INT NOT NULL PRIMARY KEY IDENTITY," +
+                "Medic INT NOT NULL," +
+                "DayOfWeek INT NOT NULL," +
+                "StartTime TIME NOT NULL," +
+                "EndTime TIME NOT NULL); ";
+            try
+            {
+                db.Execute(sql);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

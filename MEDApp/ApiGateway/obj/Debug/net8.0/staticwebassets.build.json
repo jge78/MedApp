@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "MIEk6XwrduJe3UzfX1hC2eeKst0bduS77VYnc2B98P0=",
+  "Source": "MEDApp.ApiGateway",
+  "BasePath": "_content/MEDApp.ApiGateway",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
