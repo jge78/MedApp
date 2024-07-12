@@ -4,6 +4,7 @@ namespace AppointmentsConsumer.Data
 {
     public interface IAppointmentRepository
     {
+        bool InitializeDB();
         Appointment Get(int id);
         List<Appointment> GetAll();
         Appointment Add(Appointment appointment);

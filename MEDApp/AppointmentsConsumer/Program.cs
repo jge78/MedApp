@@ -5,6 +5,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using AppointmentsConsumer.Messaging;
 using AppointmentsConsumer;
+using AppointmentsConsumer.Data;
 
 
 namespace AppointmentManagementConsumer
@@ -76,6 +77,14 @@ namespace AppointmentManagementConsumer
                 .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();
+
+            //Initialize Database
+            IAppointmentRepository appointmentRepository = new AppointmentRepository(config.GetConnectionString("MasterDB"));
+
+            if (appointmentRepository.InitializeDB() == false)
+            {
+                throw new Exception("The Database could not be initialized");
+            }
 
         }
 
