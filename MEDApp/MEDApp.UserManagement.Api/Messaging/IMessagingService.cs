@@ -2,12 +2,12 @@
 {
     public interface IMessagingService
     {
-        public T Add<T>(T message);
-        public T Delete<T>(int id);
-        public T Get<T>(int id);
-        public List<T> GetAll<T>();
-        public T Update<T>(T message);
-        public string Send<T>(T message);
+        public Task<T> Add<T>(T message);
+        public Task<bool> Delete(int id);
+        public Task<T> Get<T>(int id);
+        public Task<List<T>> GetAll<T>();
+        public Task<T> Update<T>(T message);
+        public Task<string> Send<T>(T message);
 
     }
 }

@@ -18,38 +18,68 @@ namespace MEDApp.UserManagement.Api.Controllers
 
         // ADD POST api/<UserController> 
         [HttpPost]
-        public User Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody] User user)
         {
-            return _messagingService.Add<User>(user);
+            User newUser = await _messagingService.Add<User>(user);
+
+            if (newUser.Id == 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            return Ok(newUser);
         }
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public User Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return _messagingService.Delete<User>(id);
+            bool deleteResult = await _messagingService.Delete(id);
+
+            if (deleteResult == true)
+            {
+                return Ok(deleteResult);
+            }
+            return NotFound();
+
         }
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public User Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return _messagingService.Get<User>(id);
+            User user = await _messagingService.Get<User>(id);
+
+            if (user.Id == 0)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
         // GET: api/<UserController>
         [HttpGet]
-        public List<User> Get()
+        public async Task<IActionResult> Get()
         {
-            return _messagingService.GetAll<User>();
+            List<User> usersList = await _messagingService.GetAll<User>();
+
+            if (usersList.Count == 0)
+            { 
+                return NoContent();
+            }
+            return Ok(usersList);
         }
 
-        // PUT api/<UserController>/5
+        //// PUT api/<UserController>/5
         [HttpPut]
-        public User Put([FromBody] User user)
+        public async Task<IActionResult> Put([FromBody] User user)
         {
-            //user.Id= id;
-            return _messagingService.Update<User>(user);
+            User updatedUser = await _messagingService.Update<User>(user);
+
+            if (user.Id == 0)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
     }
