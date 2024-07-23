@@ -1,10 +1,9 @@
-﻿using System.Text;
-using System.Threading.Channels;
-using MEDApp.UserManagement.Api.Models;
+﻿using MEDApp.UserManagement.Api.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Text;
 using UserManagementConsumer.Data;
 using UserManagementConsumer.Messaging;
 
@@ -99,8 +98,10 @@ namespace UserManagementConsumer
                 channel.BasicPublish(EXCHANGE_NAME, properties.ReplyTo, replyproperties, responseMessageBytes);
             };
 
-            channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
-            Console.ReadKey();
+            while (true)
+            {
+                channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
+            }
 
         }
 
@@ -111,6 +112,14 @@ namespace UserManagementConsumer
                 .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
 
             config = builder.Build();
+
+            //Initialize Database
+            IUserRepository userRepository = new UserRepository(config.GetConnectionString("MasterDB"));
+
+            if (userRepository.InitializeDB() == false)
+            {
+                throw new Exception("The Database could not be initialized");
+            }
 
         }
 

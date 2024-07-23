@@ -4,6 +4,7 @@
     {
         public enum UserTypes
         {
+            Admin=0,
             Medic=1,
             User,
             Patient

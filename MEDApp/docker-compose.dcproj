@@ -5,9 +5,8 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
     <ProjectGuid>62bc5be8-50f2-4d1f-8e6e-def91bbd21d2</ProjectGuid>
-    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>medapp.appointments.api</DockerServiceName>
+    <DockerLaunchAction>None</DockerLaunchAction>
+    <DockerServiceName>medapp.apigateway</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

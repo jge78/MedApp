@@ -1,5 +1,4 @@
-﻿using MEDApp.UserManagement.Api.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -12,9 +11,14 @@ namespace MEDApp.UserManagement.Api.Messaging
         private const string EXCHANGE_NAME = "MedAppUsers";
         private const string QUEUE_NAME = "Users";
         private string _replyQueueName = "rpc_reply";
-        private EventingBasicConsumer _consumer;
+        private static IConfigurationRoot config;
 
-        public string AddUser<T>(T message)
+        public RabbitMQMessagingService()
+        {
+            Initialize();
+        }
+
+        public T Add<T>(T message)
         {
             Message addUserMessage = new Message
             {
@@ -23,56 +27,45 @@ namespace MEDApp.UserManagement.Api.Messaging
                 payload = message
             };
 
-            var user = new User();
-            user = JsonConvert.DeserializeObject<User>(Send(addUserMessage));
-            return user.Id.ToString();
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(addUserMessage));
+            return returnValue;
         }
 
-        public string DeleteUser(int id)
+        public T Delete<T>(int id)
         {
-            //throw new NotImplementedException();
             Message deleteUserMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.Delete,
                 id = id.ToString()
             };
 
-            var user = new User();
-            user = JsonConvert.DeserializeObject<User>(Send(deleteUserMessage));
-            return user.Id.ToString();
-
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(deleteUserMessage));
+            return returnValue;
         }
         
-        public User GetUser(int id)
+        public T Get<T>(int id)
         {
-            //throw new NotImplementedException();
             Message getUserMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.Get,
                 id = id.ToString()
             };
 
-            var user = new User();
-            user = JsonConvert.DeserializeObject<User>(Send(getUserMessage));
-            return user;
-
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(getUserMessage));
+            return returnValue;
         }
 
-        public List<User> GetAllUsers()
+        public List<T> GetAll<T>()
         {
-
-            //throw new NotImplementedException();
             Message getAllUsersMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.GetAll
             };
 
-            var users = new List<User>();
-            users = JsonConvert.DeserializeObject<List<User>>(Send(getAllUsersMessage));
-            return users;
-
+            var returnList = JsonConvert.DeserializeObject<List<T>>(Send(getAllUsersMessage));
+            return returnList;
         }
-        public User UpdateUser<T>(T message)
+        public T Update<T>(T message)
         {
             Message updateUserMessage = new Message
             {
@@ -80,26 +73,28 @@ namespace MEDApp.UserManagement.Api.Messaging
                 payload = message
             };
 
-            var updateUser = new User();
-            updateUser = JsonConvert.DeserializeObject<User>(Send(updateUserMessage));
-            return updateUser;
-
+            var returnValue = JsonConvert.DeserializeObject<T>(Send(updateUserMessage));
+            return returnValue;
         }
 
         public string Send<T>(T message)
         {
+            EventingBasicConsumer _consumer;
             string returnMessage = "";
 
             var factory = new ConnectionFactory
             {
-                HostName = "localhost"
+                HostName = config.GetSection("MessagingServers:Server").Value.ToString(),
+                UserName = config.GetSection("MessagingServers:User").Value.ToString(),
+                Password = config.GetSection("MessagingServers:Password").Value.ToString()
             };
 
             var connection = factory.CreateConnection();
 
             using var channel = connection.CreateModel();
             channel.ExchangeDeclare(exchange: EXCHANGE_NAME, type: ExchangeType.Fanout);
-
+            channel.QueueDeclare(QUEUE_NAME, true, false, false);
+            channel.QueueDeclare(_replyQueueName, true, false, false);
             channel.QueueBind(queue: _replyQueueName, exchange: EXCHANGE_NAME, routingKey: _replyQueueName);
             _consumer = new EventingBasicConsumer(channel);
 
@@ -131,5 +126,14 @@ namespace MEDApp.UserManagement.Api.Messaging
 
         }
 
+        private static void Initialize()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
+
+            config = builder.Build();
+
+        }
     }
 }
