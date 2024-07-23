@@ -35,7 +35,7 @@ namespace UserManagementConsumer
 
             var consumer = new EventingBasicConsumer(channel);
 
-            consumer.Received += (model, EventArgs) =>
+            consumer.Received += async (model, EventArgs) =>
             {
                 var body = EventArgs.Body.ToArray();
                 var properties = EventArgs.BasicProperties;
@@ -61,23 +61,22 @@ namespace UserManagementConsumer
                         var tempUser = JsonConvert.SerializeObject(messageToprocess.payload);
                         User user = JsonConvert.DeserializeObject<User>(tempUser);
 
-                        User newUser = AddUser(user);
+                        User newUser = await AddUser(user);
                         responseMessage = JsonConvert.SerializeObject(newUser);
                         break;
 
                     case MessageEnums.OperationTypes.Delete:
-                        DeleteUser(Int32.Parse(idUser));
-                        User deletedUser = new User { Id = Int32.Parse(idUser) };
-                        responseMessage = JsonConvert.SerializeObject(deletedUser);
+                        var deleteResult = await DeleteUser(Int32.Parse(idUser));
+                        responseMessage = JsonConvert.SerializeObject(deleteResult);
                         break;
 
                     case MessageEnums.OperationTypes.Get:
-                        User getUser = GetUser(Int32.Parse(idUser));
+                        User getUser = await GetUser(Int32.Parse(idUser));
                         responseMessage = JsonConvert.SerializeObject(getUser);
                         break;
 
                     case MessageEnums.OperationTypes.GetAll:
-                        List<User> users = GetAllUsers();
+                        List<User> users = await GetAllUsers();
                         responseMessage = JsonConvert.SerializeObject(users);
                         break;
 
@@ -85,7 +84,7 @@ namespace UserManagementConsumer
                         var tempUpdateUser = JsonConvert.SerializeObject(messageToprocess.payload);
                         User updateUser = JsonConvert.DeserializeObject<User>(tempUpdateUser);
 
-                        User updated = UpdateUser(updateUser);
+                        User updated = await UpdateUser(updateUser);
                         responseMessage = JsonConvert.SerializeObject(updated);
                         break;
 
@@ -105,7 +104,7 @@ namespace UserManagementConsumer
 
         }
 
-        private static void Initialize()
+        private static async void Initialize()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -115,43 +114,42 @@ namespace UserManagementConsumer
 
             //Initialize Database
             IUserRepository userRepository = new UserRepository(config.GetConnectionString("MasterDB"));
-
-            if (userRepository.InitializeDB() == false)
+            var initializeResult = await userRepository.InitializeDB();
+            if (initializeResult == false)
             {
                 throw new Exception("The Database could not be initialized");
             }
 
         }
 
-        private static User AddUser(User user)
+        private static async Task<User> AddUser(User user)
         {
             IUserRepository userRepository = CreateUserRepository();
-            return userRepository.Add(user);
+            return await userRepository.Add(user);
         }
 
-        private static void DeleteUser(int id)
+        private static async Task<bool> DeleteUser(int id)
         {
             IUserRepository userRepository = CreateUserRepository();
-            userRepository.Delete(id);
+            return await userRepository.Delete(id);
         }
 
-        private static User GetUser(int id)
+        private static async Task<User> GetUser(int id)
         {
             IUserRepository userRepository = CreateUserRepository();
-            //return userRepository.Add(user);
-            return userRepository.GetUser(id);
+            return await userRepository.GetUser(id);
         }
 
-        private static List<User> GetAllUsers()
+        private static async Task<List<User>> GetAllUsers()
         {
             IUserRepository userRepository = CreateUserRepository();
-            return userRepository.GetAll();
+            return await userRepository.GetAll();
         }
 
-        private static User UpdateUser(User user)
+        private static async Task<User> UpdateUser(User user)
         {
             IUserRepository userRepository = CreateUserRepository();
-            return userRepository.Update(user);
+            return await userRepository.Update(user);
         }
 
         private static IUserRepository CreateUserRepository()

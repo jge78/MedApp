@@ -1,6 +1,0 @@
-C:\Development\WorkingFolderGit\MedApp\MEDApp\AppointmentsDB\bin\Debug\AppointmentsDB.dacpac
-C:\Development\WorkingFolderGit\MedApp\MEDApp\AppointmentsDB\bin\Debug\AppointmentsDB.dll
-C:\Development\WorkingFolderGit\MedApp\MEDApp\AppointmentsDB\bin\Debug\AppointmentsDB.pdb
-C:\Development\WorkingFolderGit\MedApp\MEDApp\AppointmentsDB\obj\Debug\AppointmentsDB.sqlproj.AssemblyReference.cache
-C:\Development\WorkingFolderGit\MedApp\MEDApp\AppointmentsDB\obj\Debug\AppointmentsDB.dll
-C:\Development\WorkingFolderGit\MedApp\MEDApp\AppointmentsDB\obj\Debug\AppointmentsDB.pdb

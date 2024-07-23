@@ -18,7 +18,7 @@ namespace MEDApp.UserManagement.Api.Messaging
             Initialize();
         }
 
-        public T Add<T>(T message)
+        public async Task<T> Add<T>(T message)
         {
             Message addUserMessage = new Message
             {
@@ -27,11 +27,11 @@ namespace MEDApp.UserManagement.Api.Messaging
                 payload = message
             };
 
-            var returnValue = JsonConvert.DeserializeObject<T>(Send(addUserMessage));
+            var returnValue = JsonConvert.DeserializeObject<T>(await Send(addUserMessage));
             return returnValue;
         }
 
-        public T Delete<T>(int id)
+        public async Task<bool> Delete(int id)
         {
             Message deleteUserMessage = new Message
             {
@@ -39,11 +39,11 @@ namespace MEDApp.UserManagement.Api.Messaging
                 id = id.ToString()
             };
 
-            var returnValue = JsonConvert.DeserializeObject<T>(Send(deleteUserMessage));
+            var returnValue = JsonConvert.DeserializeObject<bool>(await Send(deleteUserMessage));
             return returnValue;
         }
         
-        public T Get<T>(int id)
+        public async Task<T> Get<T>(int id)
         {
             Message getUserMessage = new Message
             {
@@ -51,21 +51,21 @@ namespace MEDApp.UserManagement.Api.Messaging
                 id = id.ToString()
             };
 
-            var returnValue = JsonConvert.DeserializeObject<T>(Send(getUserMessage));
+            var returnValue = JsonConvert.DeserializeObject<T>(await Send(getUserMessage));
             return returnValue;
         }
 
-        public List<T> GetAll<T>()
+        public async Task<List<T>> GetAll<T>()
         {
             Message getAllUsersMessage = new Message
             {
                 operationType = MessageEnums.OperationTypes.GetAll
             };
 
-            var returnList = JsonConvert.DeserializeObject<List<T>>(Send(getAllUsersMessage));
+            var returnList = JsonConvert.DeserializeObject<List<T>>(await Send(getAllUsersMessage));
             return returnList;
         }
-        public T Update<T>(T message)
+        public async Task<T> Update<T>(T message)
         {
             Message updateUserMessage = new Message
             {
@@ -73,11 +73,11 @@ namespace MEDApp.UserManagement.Api.Messaging
                 payload = message
             };
 
-            var returnValue = JsonConvert.DeserializeObject<T>(Send(updateUserMessage));
+            var returnValue = JsonConvert.DeserializeObject<T>(await Send(updateUserMessage));
             return returnValue;
         }
 
-        public string Send<T>(T message)
+        public async Task<string> Send<T>(T message)
         {
             EventingBasicConsumer _consumer;
             string returnMessage = "";
