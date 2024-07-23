@@ -1,55 +1,168 @@
 {
   "Routes": [
+
+    // Authentication Web API
     {
-      "UpstreamPathTemplate": "/api/appointment",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "UpstreamPathTemplate": "/api/account",
+      "UpstreamHttpMethod": [ "Post" ],
+
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5087
+          "Host": "medappauthenticationwebapi",
+          "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/appointment"
+      "DownstreamPathTemplate": "/api/account"
+    },
+
+    // User Management Web API
+    {
+      "UpstreamPathTemplate": "/api/user",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "medapp.usermanagement.api",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/user",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/user/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "medapp.usermanagement.api",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/user/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+
+    // Appointment Web API
+    {
+      "UpstreamPathTemplate": "/api/appointment",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "medapp.appointments.api",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/appointment",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/appointment/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
+
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5087
+          "Host": "medapp.appointments.api",
+          "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/appointment/{id}"
+      "DownstreamPathTemplate": "/api/appointment/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
+
+    // Shifts Web API
     {
       "UpstreamPathTemplate": "/api/shift",
       "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5087
+          "Host": "medapp.appointments.api",
+          "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/shift"
+      "DownstreamPathTemplate": "/api/shift",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/shift/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
+
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5087
+          "Host": "medapp.appointments.api",
+          "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/shift/{id}"
+      "DownstreamPathTemplate": "/api/shift/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+
+    //Patient Management Web API / Allergy
+    {
+      "UpstreamPathTemplate": "/api/allergy",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "medapp.patientmanagement.api",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/allergy",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/allergy/{id}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
+
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "medapp.patientmanagement.api",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/allergy/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
+
+
   ],
   "GlobalConfiguration": {
-    "BaseURL": "http://localhost:5003"
+    "BaseURL": "http://localhost:8085"
   }
 }

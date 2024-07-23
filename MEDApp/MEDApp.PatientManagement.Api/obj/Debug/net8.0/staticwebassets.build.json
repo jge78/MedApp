@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "r/FckXUDh6iy32p2juDa0jnkdFPSa2kfooYn1AV5ugA=",
+  "Source": "MEDApp.PatientManagement.Api",
+  "BasePath": "_content/MEDApp.PatientManagement.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

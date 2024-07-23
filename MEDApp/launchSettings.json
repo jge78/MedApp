@@ -4,7 +4,13 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "medapp.appointments.api": "StartDebugging"
+        "medapp.appointments.api": "StartDebugging",
+        "usermanagementconsumer": "StartDebugging",
+        "medapp.usermanagement.api": "StartDebugging",
+        "medapp.apigateway": "StartDebugging",
+        "medappauthenticationwebapi": "StartDebugging",
+        "patientmanagementconsumer": "StartDebugging",
+        "medapp.patientmanagement.api": "StartDebugging"
       }
     }
   }

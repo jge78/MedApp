@@ -1,0 +1,13 @@
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\bin\Debug\net8.0\appsettings.json
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\bin\Debug\net8.0\MedAppJwtAuthenticationManager.deps.json
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\bin\Debug\net8.0\MedAppJwtAuthenticationManager.dll
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\bin\Debug\net8.0\MedAppJwtAuthenticationManager.pdb
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\MedAppJwtAuthenticationManager.csproj.AssemblyReference.cache
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\MedAppJwtAuthenticationManager.GeneratedMSBuildEditorConfig.editorconfig
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\MedAppJwtAuthenticationManager.AssemblyInfoInputs.cache
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\MedAppJwtAuthenticationManager.AssemblyInfo.cs
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\MedAppJwtAuthenticationManager.csproj.CoreCompileInputs.cache
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\MedAppJwtAuthenticationManager.dll
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\refint\MedAppJwtAuthenticationManager.dll
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\MedAppJwtAuthenticationManager.pdb
+C:\Development\WorkingFolderGit\MedApp\MEDApp\MedAppJwtAuthenticationManager\obj\Debug\net8.0\ref\MedAppJwtAuthenticationManager.dll
